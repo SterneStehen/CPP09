@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:34:01 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/24 15:51:49 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:57:52 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,12 +36,21 @@ bool openData(const std::string &dataCsv){
 		strValue = line.substr(comma+1);
 		try{
 			value = std::stod(strValue);
+			dataMap[dataNumber] = value;
 		}
 		catch(...){
 			continue;
 		}
-		std::cout << "string dataNumber = " << dataNumber << "   double Value = " << value << std::endl;
+		
+		//std::cout << "string dataNumber = " << dataNumber << "   double Value = " << value << std::endl;
 	}
+	// auto it = dataMap.begin();
+	// while (it != dataMap.end())
+	// {
+	// 	std::cout << it->second << it->first << std::endl;
+	// 	it++;
+	// }
+	
 	
 	return 1;
 }
