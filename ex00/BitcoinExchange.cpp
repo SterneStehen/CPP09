@@ -6,14 +6,19 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:40:03 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/24 18:21:40 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/02/25 23:55:24 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 
 #include "BitcoinExchange.hpp"
+#include <iomanip> 
 
-BitcoinExchange::BitcoinExchange(/* args */)
+#include "BitcoinExchange.hpp"
+#include <fstream>
+#include <sstream>
+
+BitcoinExchange::BitcoinExchange()
 {
 }
 
@@ -21,64 +26,105 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
-
-bool BitcoinExchange::openData(const std::string &dataCsv){
-	int comma;
-	double value;
-	std::string dataNumber;
-	std::string strValue;
-	std::string line;
-	//std::ifstream file(dataFile);
-	//file >> dataString;
-	//std::cout << dataString << std::endl;
-	//std::map<std::string, int> dataMap;
+bool BitcoinExchange::openData(const std::string &dataCsv)
+{
 	std::ifstream file(dataCsv);
-	
+	if (!file.is_open())
+	{
+		std::cerr << "Error: Could not open data file: " << dataCsv << std::endl;
+		return false;
+	}
+
+	std::string line;
+		
+		
+
 	while (std::getline(file, line))
 	{
-		if(line.empty())
+		if (line.empty())
 			continue;
-		comma = line.find(',');
-		dataNumber = line.substr(0, comma);
-		strValue = line.substr(comma+1);
-		try{
-			value = std::stod(strValue);
-			dataMap[dataNumber] = value;
+
+			
+		std::size_t commaPos = line.find(',');
+		if (commaPos == std::string::npos)
+			continue; 	
+
+		std::string date = line.substr(0, commaPos);
+		std::string rateStr = line.substr(commaPos + 1);
+
+			
+		while (!date.empty() && (date.front() == ' ' || date.front() == '\t'))
+			date.erase(date.begin());
+		while (!date.empty() && (date.back() == ' ' || date.back() == '\t'))
+			date.pop_back();
+
+		while (!rateStr.empty() && (rateStr.front() == ' ' || rateStr.front() == '\t'))
+			rateStr.erase(rateStr.begin());
+		while (!rateStr.empty() && (rateStr.back() == ' ' || rateStr.back() == '\t'))
+			rateStr.pop_back();
+
+		double rate;
+		try
+		{
+			rate = std::stod(rateStr);
 		}
-		catch(...){
+		catch (const std::exception &e)
+		{
+				
 			continue;
 		}
+		dataMap[date] = rate;
+	}
+
+	file.close();
+	return true;
+}
+
+bool BitcoinExchange::checkValue(const std::string &date, double valueInput) const
+{
 		
-		//std::cout << "string dataNumber = " << dataNumber << "   double Value = " << value << std::endl;
-	}
-	// auto it = dataMap.begin();
-	// while (it != dataMap.end())
-	// {
-	// 	std::cout << it->second << it->first << std::endl;
-	// 	it++;
-	// }
-	return 1;
-}
+		
+	std::map<std::string, double>::const_iterator it = dataMap.lower_bound(date);
 
-bool BitcoinExchange::checkValue(const std::string &dataInput, double valueInput){
-	//std::cout << dataInput << std::endl;
-	
-	for (auto it = dataMap.begin(); it != dataMap.end(); it++)
+	if (it == dataMap.end())
 	{
-		std::cout<<it->first << "     it = " << it->second << std::endl;
+			
+			
+		if (dataMap.empty())
+		{
+				
+			std::cout << "Error: database is empty" << std::endl;
+			return false;
+		}
+			
+		it = --dataMap.end();
 	}
-	
-	
-	
-	auto it = dataMap.find(dataInput);
-	if(it != dataMap.end())
-		std::cout<< "it = " << it->second << std::endl;
-	// auto it = dataMap.begin();
-	// while (it != dataMap.end())
-	// {
-	// 	if(it == dataIn)
-	// }
-	return 1;
+	else if (it->first != date)
+	{
+			
+			
+		if (it == dataMap.begin())
+		{
+				
+				
+			std::cout << "Error: no earlier date found for " << date << std::endl;
+			return false;
+		}
+		else
+		{
+				
+			--it;
+		}
+	}
+		
+		
+
+	double rate = it->second;
+	double result = rate * valueInput;
+
+		
+	std::cout << date << " => " << valueInput << " = " << result << std::endl;
+	return true;
 }
 
-
+	
