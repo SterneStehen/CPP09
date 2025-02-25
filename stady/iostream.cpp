@@ -12,4 +12,10 @@ int main(){
 	std::ofstream file("output.txt");
 	file << answer;
 	file.close();
+
+	std::cout << "if file write you eatung.... ";
+	std::string readfile;
+	std::ifstream file2("output.txt");
+	file2 >> readfile;
+	std::cout << readfile << std::endl;
 }
