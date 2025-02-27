@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 00:02:23 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/27 23:42:03 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/02/27 23:43:29 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -28,7 +28,7 @@ bool RPN::isOperator(const std::string &token) const {
 	return token == "+" || token == "-" || token == "*" || token == "/";
 }
 
-int RPN::calculate(const std::string &expression) {
+int RPN::calc(const std::string &expression) {
 	std::istringstream iss(expression);  
 	std::stack<int> stack;  
 	std::string token;

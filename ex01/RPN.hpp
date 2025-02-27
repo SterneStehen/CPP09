@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:35:53 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/27 23:38:06 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/02/27 23:43:36 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -28,7 +28,7 @@ public:
 	RPN &operator=(const RPN &other);
 	~RPN();
 
-	int calculate(const std::string &expression);
+	int calc(const std::string &expression);
 
 private:
 	bool isNumber(const std::string &token) const;
