@@ -6,13 +6,15 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 20:25:22 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/02 20:56:59 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/02 22:51:12 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include <iostream>
 #include <vector>
 #include <list>
+#include <ctime> 
+#include "PmergeMe.hpp"
 
 
 int  ft_atoi(char *str){
@@ -39,7 +41,7 @@ bool isPositiv(char *str){
 }
 
 int main(int ac, char *av[]){
-	std::vector<int> vec;
+	std::vector<int> vect;
 	std::list<int> list;
 	std::string before;
 	int tmp;
@@ -59,7 +61,26 @@ int main(int ac, char *av[]){
 			std::cout << "digit more then MAX_INT" << std::endl;
 			return 0;
 		}
-		std::cout << "tmp = " << tmp << std::endl;
+		before += av[i];
+		before += " ";
+		list.push_back(tmp);
+		vect.push_back(tmp);
 	}
-	
+	std::cout << "before: " << before << std::endl;
+	std::cout << "LIST: " <<  std::endl;
+	for(auto it = list.begin(); it != list.end(); it++){
+		std::cout << *it <<  " ";
+	}
+	 std::cout << "\nVECTOR: " << std::endl;
+	for(auto it = vect.begin(); it != vect.end(); it++){
+		std::cout << *it <<  " ";
+	}
+
+	PmergeMe PM;
+	PM.megreSortVector(vect);
+	std::cout << "\nNEW VECTOR: " << std::endl;
+	for(auto it = vect.begin(); it != vect.end(); it++){
+		std::cout << *it <<  " ";
+	}
+
 }
