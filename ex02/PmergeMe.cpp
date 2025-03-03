@@ -6,9 +6,11 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:51 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/02 22:54:54 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/03 12:51:33 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
+
+
 
 #include "PmergeMe.hpp"
 
@@ -20,56 +22,87 @@ PmergeMe::~PmergeMe()
 {
 }
 
-void PmergeMe::joinVector(std::vector<int> &vect, int left, int  mid, int  right){
-	int n1 = mid - left + 1;
-	int n2 = right - mid;
-	std::vector<int> L(n1), R(n2);
-
-	for (int i = 0; i < n1; i++)
-		L[i] = vect[left + i];
-	for (int j = 0; j < n2; j++)
-		R[j] = vect[mid + 1 + j];
-
-	int i = 0, j = 0;
-	int k = left;
-	while (i < n1 && j < n2)
-	{
-		if (L[i] <= R[j]){
-			vect[k] = L[i];
-			i++;
-		}
-		
-		else{
-			vect[k] = R[j];
-			j++;
-		}
-		k++;
-	}
-	while (i < n1)
-	{
-		vect[k] = L[i];
-		i++;
-		k++;
-	}
-	while (j < n2)
-	{
-		vect[k] = R[j];
-		j++;
-		k++;
-	}
+void PmergeMe::megreSortVector(std::vector<int> &vect)
+{
+	if (vect.size() < 2)
+		return; 
+	joinVector(vect);
 }
 
-void PmergeMe::splitVector(std::vector<int> &vect, int left, int right){
-	if(left >= right)
+
+void PmergeMe::joinVector(std::vector<int> &vect)
+{
+	const int INSERTION_THRESHOLD = 5; 
+	size_t n = vect.size();
+
+	if (n <= INSERTION_THRESHOLD)
+	{
+		splitVector(vect, 0, n - 1);
 		return;
-	int mid = (left+right)/2;
-	splitVector(vect, left, mid);
-	splitVector(vect, mid+1, right);
-	joinVector(vect, left, mid, right);
+	}
+
+	
+	std::vector<int> leaders;
+	std::vector<int> followers;
+	leaders.reserve(n/2 + 1);
+	followers.reserve(n/2 + 1);
+
+	for (size_t i = 0; i < n; i += 2)
+	{
+		if (i + 1 < n)
+		{
+			
+			if (vect[i] <= vect[i + 1])
+			{
+				leaders.push_back(vect[i]);
+				followers.push_back(vect[i + 1]);
+			}
+			else
+			{
+				leaders.push_back(vect[i + 1]);
+				followers.push_back(vect[i]);
+			}
+		}
+		else
+		{
+			
+			leaders.push_back(vect[i]);
+		}
+	}
+
+	
+	joinVector(leaders);
+
+	for (size_t i = 0; i < followers.size(); i++)
+	{
+		binaryInsert(leaders, followers[i]);
+	}
+
+	
+	vect = leaders;
 }
 
-void PmergeMe::megreSortVector(std::vector<int> &vect){
-	if(vect.empty())
-		return;
-	splitVector(vect, 0, vect.size()-1);
+
+void PmergeMe::binaryInsert(std::vector<int> &arr, int x)
+{
+	
+	std::vector<int>::iterator it = std::lower_bound(arr.begin(), arr.end(), x);
+	arr.insert(it, x);
+
+}
+	
+
+void PmergeMe::splitVector(std::vector<int> &arr, int left, int right)
+{
+	for (int i = left + 1; i <= right; i++)
+	{
+		int key = arr[i];
+		int j = i - 1;
+		while (j >= left && arr[j] > key)
+		{
+			arr[j + 1] = arr[j];
+			j--;
+		}
+		arr[j + 1] = key;
+	}
 }
