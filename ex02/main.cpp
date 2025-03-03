@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 20:25:22 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/04 00:06:25 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/04 00:30:05 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,17 +14,28 @@
 #include <vector>
 #include <list>
 #include <ctime> 
+#include <cstdlib>
+#include <climits>
 #include "PmergeMe.hpp"
+#include <cstdlib>  
+#include <climits>  
 
-int  ft_atoi(char *str){
-	int res;
-	long long tmp;
-	tmp = std::stol(str);
-	if(tmp > 2147483647)
+int ft_atoi(const char *str) {
+	if (!str || !*str)  
 		return -1;
-	res = static_cast<int>(tmp);
-	return res;
+
+	char *endptr;
+	long tmp = std::strtol(str, &endptr, 10);  
+
+	if (*endptr != '\0')
+		return -1;
+
+	if (tmp > INT_MAX)
+		return -1;
+
+	return static_cast<int>(tmp);
 }
+
 
 bool isPositiv(char *str){
 	if(!str || !*str)
@@ -32,8 +43,8 @@ bool isPositiv(char *str){
 	int i = 0;
 	while (str[i] != '\0')
 	{
-		if(str[i] < '0')
-			return 0;
+		if(str[i] < '0' || str[i] > '9')
+			return -1;
 		i++;
 	}
 	return 1;
@@ -66,36 +77,35 @@ int main(int ac, char *av[]){
 		vect.push_back(tmp);
 	}
 	std::cout << "before: " << before << std::endl;
-	std::cout << "LIST: " <<  std::endl;
-	for(auto it = list.begin(); it != list.end(); it++){
-		std::cout << *it <<  " ";
-	}
-	 std::cout << "\nVECTOR: " << std::endl;
-	for(auto it = vect.begin(); it != vect.end(); it++){
-		std::cout << *it <<  " ";
-	}
+	
+	
+	
+	
+	
+	
+	
+	
 
-	PmergeMe PM;
 	PmergeMe PM;
 
 	try {
 	clock_t startVect = clock();
 	PM.megreSortVector(vect);
 	clock_t endVect = clock();
-	double timeVect = static_cast<double>(endVect - startVect) / CLOCKS_PER_SEC * 1'000'000.0;
+	double timeVect = static_cast<double>(endVect - startVect) / CLOCKS_PER_SEC * 1000000.0;
 
 	clock_t startList = clock();
 	PM.megreSortList(list);
 	clock_t endList = clock();
-	double timeList = static_cast<double>(endList - startList) / CLOCKS_PER_SEC * 1'000'000.0;
+	double timeList = static_cast<double>(endList - startList) / CLOCKS_PER_SEC * 1000000.0;
 
-	std::cout << "\nNEW VECTOR: " << std::endl;
-	for (std::vector<int>::iterator it = vect.begin(); it != vect.end(); ++it) {
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
+	
+	
+	
+	
+	
 
-	std::cout << "LIST: " << std::endl;
+	std::cout << "After: ";
 	for (std::list<int>::iterator it = list.begin(); it != list.end(); ++it) {
 		std::cout << *it << " ";
 	}

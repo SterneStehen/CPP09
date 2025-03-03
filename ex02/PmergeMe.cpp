@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:51 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/03 21:22:00 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/04 00:11:38 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -26,18 +26,18 @@ void PmergeMe::megreSortVector(std::vector<int> &vect)
 {
 	if (vect.size() < 2)
 		return; 
-	joinVector(vect);
+	insertionVector(vect);
 }
 
 
-void PmergeMe::joinVector(std::vector<int> &vect)
+void PmergeMe::insertionVector(std::vector<int> &vect)
 {
 	const int INSERTION_THRESHOLD = 5; 
 	size_t n = vect.size();
 
 	if (n <= INSERTION_THRESHOLD)
 	{
-		splitVector(vect, 0, n - 1);
+		sortSplitVector(vect, 0, n - 1);
 		return;
 	}
 
@@ -71,7 +71,7 @@ void PmergeMe::joinVector(std::vector<int> &vect)
 	}
 
 	
-	joinVector(leaders);
+	insertionVector(leaders);
 
 	for (size_t i = 0; i < followers.size(); i++)
 	{
@@ -92,7 +92,7 @@ void PmergeMe::binaryInsert(std::vector<int> &arr, int x)
 }
 	
 
-void PmergeMe::splitVector(std::vector<int> &arr, int left, int right)
+void PmergeMe::sortSplitVector(std::vector<int> &arr, int left, int right)
 {
 	for (int i = left + 1; i <= right; i++)
 	{
