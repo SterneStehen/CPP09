@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:51 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/03 12:51:33 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/03 21:22:00 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -106,3 +106,129 @@ void PmergeMe::splitVector(std::vector<int> &arr, int left, int right)
 		arr[j + 1] = key;
 	}
 }
+
+
+	
+
+//sort list
+	
+	
+	
+void PmergeMe::insertionSortList(std::list<int> &lst)
+{
+	if (lst.size() < 2) return;
+
+		
+	for (std::list<int>::iterator it = ++lst.begin(); it != lst.end(); ++it)
+	{
+		int key = *it;
+		std::list<int>::iterator j = it;
+			
+		while (j != lst.begin())
+		{
+			std::list<int>::iterator prev = j;
+			--prev;
+			if (*prev <= key)
+				break;
+				
+			*j = *prev;
+			j = prev;
+		}
+		*j = key;
+	}
+}
+
+	
+	
+	
+void PmergeMe::insertSorted(std::list<int> &lst, int value)
+{
+		
+	for (std::list<int>::iterator it = lst.begin(); it != lst.end(); ++it)
+	{
+		if (*it > value)
+		{
+			lst.insert(it, value);
+			return;
+		}
+	}
+		
+	lst.push_back(value);
+}
+
+	
+	
+	
+	
+void PmergeMe::splitIntoPairs(const std::list<int> &src, std::list<int> &leaders, std::list<int> &followers)
+{
+	std::list<int>::const_iterator it = src.begin();
+	while (it != src.end())
+	{
+		int first = *it;
+		++it;
+		if (it != src.end())
+		{
+			int second = *it;
+			++it;
+				
+			if (first <= second)
+			{
+				leaders.push_back(first);
+				followers.push_back(second);
+			}
+			else
+			{
+				leaders.push_back(second);
+				followers.push_back(first);
+			}
+		}
+		else
+		{
+				
+			leaders.push_back(first);
+		}
+	}
+}
+
+	
+	
+	
+void PmergeMe::recursiveList(std::list<int> &list)
+{
+	const size_t INSERTION_THRESHOLD = 5;
+
+		
+	if (list.size() <= INSERTION_THRESHOLD)
+	{
+		insertionSortList(list);
+		return;
+	}
+
+		
+	std::list<int> leaders;
+	std::list<int> followers;
+	splitIntoPairs(list, leaders, followers);
+
+		
+	recursiveList(leaders);
+
+		
+	for (std::list<int>::iterator it = followers.begin(); it != followers.end(); ++it)
+	{
+		insertSorted(leaders, *it);
+	}
+
+		
+	list.swap(leaders); 
+		
+}
+
+	
+void PmergeMe::megreSortList(std::list<int> &lst)
+{
+	if (lst.size() < 2)
+		return; 	
+	recursiveList(lst);
+}
+	
