@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:51 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/04 00:11:38 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/04 01:31:34 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,15 +14,38 @@
 
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe()
-{
+
+PmergeMe::PmergeMe() {
 }
 
-PmergeMe::~PmergeMe()
-{
+PmergeMe::PmergeMe(const PmergeMe &other) {
+    *this = other;
 }
 
-void PmergeMe::megreSortVector(std::vector<int> &vect)
+PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
+    if (this != &other) {
+        this->vect = other.vect;
+        this->list = other.list;
+    }
+    return *this;
+}
+
+PmergeMe::~PmergeMe() {
+}
+
+
+void PmergeMe::setList(int tmp){
+	list.push_back(tmp);
+};
+void PmergeMe::setVect(int tmp){
+	vect.push_back(tmp);
+};
+
+int PmergeMe::getSize() const{
+	return list.size();
+};
+
+void PmergeMe::megreSortVector()
 {
 	if (vect.size() < 2)
 		return; 
@@ -92,6 +115,8 @@ void PmergeMe::binaryInsert(std::vector<int> &arr, int x)
 }
 	
 
+
+
 void PmergeMe::sortSplitVector(std::vector<int> &arr, int left, int right)
 {
 	for (int i = left + 1; i <= right; i++)
@@ -108,12 +133,6 @@ void PmergeMe::sortSplitVector(std::vector<int> &arr, int left, int right)
 }
 
 
-	
-
-//sort list
-	
-	
-	
 void PmergeMe::insertionSortList(std::list<int> &lst)
 {
 	if (lst.size() < 2) return;
@@ -218,17 +237,23 @@ void PmergeMe::recursiveList(std::list<int> &list)
 	{
 		insertSorted(leaders, *it);
 	}
-
-		
 	list.swap(leaders); 
 		
 }
 
 	
-void PmergeMe::megreSortList(std::list<int> &lst)
+void PmergeMe::megreSortList()
 {
-	if (lst.size() < 2)
+	if (list.size() < 2)
 		return; 	
-	recursiveList(lst);
+	recursiveList(list);
 }
-	
+
+void PmergeMe::printSort()
+{
+    // Можно вывести вектор (после sort) для наглядности
+    std::cout << "After: ";
+    for (std::vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
+        std::cout << *it << " ";
+    std::cout << std::endl;
+}

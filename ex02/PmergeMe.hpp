@@ -6,9 +6,10 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:38 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/04 00:11:18 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/04 01:29:44 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
+
 
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
@@ -17,26 +18,36 @@
 #include <vector>
 #include <list>
 
-class PmergeMe
-{
+class PmergeMe {
 private:
-//vector
-	void sortSplitVector(std::vector<int> &vect, int left, int right);
+	std::vector<int> vect;
+	std::list<int> list;
+	
 	void insertionVector(std::vector<int> &vect);
+	void sortSplitVector(std::vector<int> &arr, int left, int right);
 	void binaryInsert(std::vector<int> &arr, int x);
-//list
+
 	void recursiveList(std::list<int> &list);
-	void splitIntoPairs(const std::list<int> &src, std::list<int> &leaders, std::list<int> &followers);
-	void insertSorted(std::list<int> &lst, int value);
 	void insertionSortList(std::list<int> &lst);
+	void insertSorted(std::list<int> &lst, int value);
+	void splitIntoPairs(const std::list<int> &src, std::list<int> &leaders, std::list<int> &followers);
 	
 public:
+    
 	PmergeMe();
+	PmergeMe(const PmergeMe &other);
+	 PmergeMe &operator=(const PmergeMe &other);
 	~PmergeMe();
-	void megreSortVector(std::vector<int> &vect);
-	void megreSortList(std::list<int> &lst);
+    
+	void megreSortVector();
+	void megreSortList();
+	
+	void setList(int tmp);
+	void setVect(int tmp);
+	
+	int getSize() const;
+	void printSort();
+
 };
-
-
 
 #endif

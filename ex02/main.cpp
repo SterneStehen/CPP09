@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 20:25:22 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/04 00:30:05 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/04 01:37:25 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -18,7 +18,8 @@
 #include <climits>
 #include "PmergeMe.hpp"
 #include <cstdlib>  
-#include <climits>  
+#include <climits>
+#include <iomanip>
 
 int ft_atoi(const char *str) {
 	if (!str || !*str)  
@@ -51,8 +52,7 @@ bool isPositiv(char *str){
 }
 
 int main(int ac, char *av[]){
-	std::vector<int> vect;
-	std::list<int> list;
+	PmergeMe PM;
 	std::string before;
 	int tmp;
 
@@ -60,6 +60,7 @@ int main(int ac, char *av[]){
 		std::cout << "add couple number" << std::endl;
 		return 0;
 	}
+	
 	for (int i = 1; i < ac; ++i)
 	{
 		if(!isPositiv(av[i])){
@@ -71,48 +72,28 @@ int main(int ac, char *av[]){
 			std::cout << "digit more then MAX_INT" << std::endl;
 			return 0;
 		}
+		PM.setList(tmp);
+		PM.setVect(tmp);
 		before += av[i];
 		before += " ";
-		list.push_back(tmp);
-		vect.push_back(tmp);
 	}
 	std::cout << "before: " << before << std::endl;
 	
-	
-	
-	
-	
-	
-	
-	
-
-	PmergeMe PM;
-
 	try {
 	clock_t startVect = clock();
-	PM.megreSortVector(vect);
+	PM.megreSortVector();
 	clock_t endVect = clock();
 	double timeVect = static_cast<double>(endVect - startVect) / CLOCKS_PER_SEC * 1000000.0;
 
 	clock_t startList = clock();
-	PM.megreSortList(list);
+	PM.megreSortList();
 	clock_t endList = clock();
 	double timeList = static_cast<double>(endList - startList) / CLOCKS_PER_SEC * 1000000.0;
 
-	
-	
-	
-	
-	
+	PM.printSort();
 
-	std::cout << "After: ";
-	for (std::list<int>::iterator it = list.begin(); it != list.end(); ++it) {
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
-
-	std::cout << "Time to process a range of " << vect.size() << " elements with std::vector : " << timeVect << " us" << std::endl;
-	std::cout << "Time to process a range of " << list.size() << " elements with std::list  : " << timeList << " us" << std::endl;
+	std::cout << std::fixed << std::setprecision(2) << "Time to process a range of " << PM.getSize() << " elements with std::vector : " << timeVect << " us" << std::endl;
+	std::cout << "Time to process a range of " << PM.getSize() << " elements with std::list  : " << timeList << " us" << std::endl;
 	}
 	catch (const std::exception &e) {
 		std::cerr << e.what() << '\n';
