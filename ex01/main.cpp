@@ -6,11 +6,9 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:23:37 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/27 23:45:42 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/03 23:03:42 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
-
-
 
 #include "RPN.hpp"
 #include <iostream>

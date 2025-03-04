@@ -6,19 +6,17 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 00:02:23 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/27 23:43:29 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/03 23:05:59 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 
 #include "RPN.hpp"
 
-
 RPN::RPN() {}
 RPN::RPN(const RPN &other) { (void)other; }
 RPN &RPN::operator=(const RPN &other) { (void)other; return *this; }
 RPN::~RPN() {}
-
 
 bool RPN::isNumber(const std::string &token) const {
 	return token.size() == 1 && std::isdigit(token[0]);
@@ -30,7 +28,6 @@ bool RPN::isOperator(const std::string &token) const {
 
 int RPN::calc(const std::string &expression) {
 	std::istringstream iss(expression);  
-	std::stack<int> stack;  
 	std::string token;
 
 	while (iss >> token) {  
@@ -43,13 +40,18 @@ int RPN::calc(const std::string &expression) {
 			if (stack.size() < 2)
 				throw std::runtime_error("Error: add digit");
 
-			int right = stack.top(); stack.pop();  
-			int left = stack.top(); stack.pop();   
+			int right = stack.top(); 
+			stack.pop();  
+			int left = stack.top(); 
+			stack.pop();   
 
 			int result = 0;
-			if (token == "+") result = left + right;
-			else if (token == "-") result = left - right;
-			else if (token == "*") result = left * right;
+			if (token == "+") 
+				result = left + right;
+			else if (token == "-") 
+				result = left - right;
+			else if (token == "*") 
+				result = left * right;
 			else if (token == "/") {
 				if (right == 0)
 					throw std::runtime_error("Error: not pissible 0");
@@ -63,7 +65,6 @@ int RPN::calc(const std::string &expression) {
 		}
 	}
 
-	
 	if (stack.size() != 1)
 		throw std::runtime_error("Error: wrong equation");
 

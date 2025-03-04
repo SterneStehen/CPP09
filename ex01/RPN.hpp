@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:35:53 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/27 23:43:36 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/03 23:03:30 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -22,6 +22,8 @@
 
 class RPN
 {
+private:
+		std::stack<int>	stack;
 public:
 	RPN();
 	RPN(const RPN &other);
@@ -29,8 +31,6 @@ public:
 	~RPN();
 
 	int calc(const std::string &expression);
-
-private:
 	bool isNumber(const std::string &token) const;
 	bool isOperator(const std::string &token) const;
 };

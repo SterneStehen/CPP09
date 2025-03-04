@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:40:03 by smoreron          #+#    #+#             */
-/*   Updated: 2025/02/25 23:58:14 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/03 22:44:12 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -17,17 +17,50 @@
 #include <fstream>
 #include <sstream>
 
-BitcoinExchange::BitcoinExchange()
-{
+BitcoinExchange::BitcoinExchange(){}
+BitcoinExchange::~BitcoinExchange(){}
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) {
+    this->dataMap = other.dataMap;
+}
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other) {
+    if (this != &other) {
+        this->dataMap = other.dataMap;
+    }
+    return *this;
 }
 
-BitcoinExchange::~BitcoinExchange()
+void BitcoinExchange::ft_trimB(std::string &s)
 {
+	while (!s.empty() && (s[0] == ' ' || s[0] == '\t' || s[0] == '\n')){
+		s.erase(s.begin());
+	}
+	while (!s.empty())
+	{
+		char lastChar = s[s.size() - 1];
+		if (lastChar == ' ' || lastChar == '\t' || lastChar == '\n')
+			s.erase(s.end() - 1);
+		else
+			break;
+    }
+}
+
+double BitcoinExchange::ft_stodB(const std::string &str)
+{
+	if (str.empty())
+		throw std::exception();
+
+	char *endptr;
+	double val = std::strtod(str.c_str(), &endptr);
+
+	if (*endptr != '\0')
+		throw std::exception();
+
+	return val;
 }
 
 bool BitcoinExchange::openData(const std::string &dataCsv)
 {
-	std::ifstream file(dataCsv);
+	std::ifstream file(dataCsv.c_str());
 	if (!file.is_open())
 	{
 		std::cerr << "Error: Could not open data file: " << dataCsv << std::endl;
@@ -47,20 +80,13 @@ bool BitcoinExchange::openData(const std::string &dataCsv)
 		std::string date = line.substr(0, commaPos);
 		std::string rateStr = line.substr(commaPos + 1);
 
-			
-		while (!date.empty() && (date.front() == ' ' || date.front() == '\t'))
-			date.erase(date.begin());
-		while (!date.empty() && (date.back() == ' ' || date.back() == '\t'))
-			date.pop_back();
-		while (!rateStr.empty() && (rateStr.front() == ' ' || rateStr.front() == '\t'))
-			rateStr.erase(rateStr.begin());
-		while (!rateStr.empty() && (rateStr.back() == ' ' || rateStr.back() == '\t'))
-			rateStr.pop_back();
+		ft_trimB(date);
+        ft_trimB(rateStr);
 
 		double rate;
 		try
 		{
-			rate = std::stod(rateStr);
+			rate = ft_stodB(rateStr);
 		}
 		catch (const std::exception &e)
 		{		
