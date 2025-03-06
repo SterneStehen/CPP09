@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:38 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/06 01:51:13 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/06 02:54:40 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -30,6 +30,7 @@ private:
 	void insertionSortList(std::list<int> &lst);
 	void insertSortedList(std::list<int> &lst, int value);	
 	void splitListIntoPairs(const std::list<int> &src, std::list<int> &leaders,	std::list<int> &followers);
+	std::vector<size_t> genJacobOrder(size_t count);
 
 public:
 	PmergeMe();						  

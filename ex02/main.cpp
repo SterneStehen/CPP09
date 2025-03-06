@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 20:25:22 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/06 01:51:29 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/06 03:06:34 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -18,9 +18,6 @@
 #include <climits>
 #include <iomanip>
 #include "PmergeMe.hpp"
-
-
-
 
 
 int main(int ac, char *av[]){
