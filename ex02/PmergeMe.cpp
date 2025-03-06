@@ -6,7 +6,7 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:51 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/06 03:03:54 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/06 03:10:24 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -118,7 +118,7 @@ std::vector<size_t> PmergeMe::genJacobOrder(size_t count) {
     }
     // uniqueJacob now contains Jacobsthal numbers < count in ascending order
 
-    // 3) Add any missing indices [0..count-1] that are not in uniqueSet, in ascending order
+    // Add any missing indices [0..count-1] that are not in uniqueSet, in ascending order
     for (size_t i = 0; i < count; i++) {
         if (uniqueSet.find(i) == uniqueSet.end()) {
             uniqueJacob.push_back(i);
