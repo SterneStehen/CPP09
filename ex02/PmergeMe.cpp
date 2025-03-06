@@ -6,254 +6,239 @@
 /*   By: smoreron <smoreron@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 23:49:51 by smoreron          #+#    #+#             */
-/*   Updated: 2025/03/04 01:31:34 by smoreron         ###   ########.fr       */
+/*   Updated: 2025/03/06 02:12:25 by smoreron         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-
-
 #include "PmergeMe.hpp"
-
+#include <climits>	
+#include <cstdlib>
+#include <algorithm>
 
 PmergeMe::PmergeMe() {
 }
 
 PmergeMe::PmergeMe(const PmergeMe &other) {
-    *this = other;
+	*this = other;
 }
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
-    if (this != &other) {
-        this->vect = other.vect;
-        this->list = other.list;
-    }
-    return *this;
+	if (this != &other) {
+		this->m_vector = other.m_vector;
+		this->m_list   = other.m_list;
+	}
+	return *this;
 }
 
 PmergeMe::~PmergeMe() {
+
 }
 
-
-void PmergeMe::setList(int tmp){
-	list.push_back(tmp);
-};
-void PmergeMe::setVect(int tmp){
-	vect.push_back(tmp);
-};
-
-int PmergeMe::getSize() const{
-	return list.size();
-};
-
-void PmergeMe::megreSortVector()
-{
-	if (vect.size() < 2)
-		return; 
-	insertionVector(vect);
+// util
+int PmergeMe::ft_atoi(const char *str) {
+	if (!str || !*str)  
+		return -1;
+	char *endptr;
+	long tmp = std::strtol(str, &endptr, 10);
+	if (*endptr != '\0')
+		return -1;
+	if (tmp > INT_MAX)
+		return -1;
+	return static_cast<int>(tmp);
 }
 
+bool PmergeMe::isPositiv(char *str) {
+	if (!str || !*str)
+		return false;
+	int i = 0;
+	while (str[i] != '\0') {
+		if (str[i] < '0' || str[i] > '9')
+			return false;
+		i++;
+	}
+	return true;
+}
 
-void PmergeMe::insertionVector(std::vector<int> &vect)
-{
-	const int INSERTION_THRESHOLD = 5; 
-	size_t n = vect.size();
+void PmergeMe::setList(int value) {
+	m_list.push_back(value);
+}
 
-	if (n <= INSERTION_THRESHOLD)
-	{
-		sortSplitVector(vect, 0, n - 1);
+void PmergeMe::setVect(int value) {
+	m_vector.push_back(value);
+}
+
+int PmergeMe::getSize() const {
+	return static_cast<int>(m_list.size());
+}
+
+void PmergeMe::FordSortVector() { 
+	if (m_vector.size() < 2)
+		return;
+	insertionSortVector(m_vector);
+}
+
+void PmergeMe::FordSortList() {
+	if (m_list.size() < 2)
+		return;
+	recursiveSortList(m_list);
+}
+
+void PmergeMe::printSort() {
+	std::cout << "After: ";
+	for (std::vector<int>::iterator it = m_vector.begin(); it != m_vector.end(); ++it) {
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+}
+
+// vector
+void PmergeMe::insertionSortVector(std::vector<int> &vec) {
+	const int INSERTION_THRESHOLD = 5; // threshold below which we do a direct insertion sort
+	size_t n = vec.size();
+	if (n <= INSERTION_THRESHOLD) {
+		insertionSortRangeVector(vec, 0, static_cast<int>(n) - 1);
 		return;
 	}
-
-	
+	// Split elements into leader/follower pairs
 	std::vector<int> leaders;
 	std::vector<int> followers;
 	leaders.reserve(n/2 + 1);
 	followers.reserve(n/2 + 1);
 
-	for (size_t i = 0; i < n; i += 2)
-	{
-		if (i + 1 < n)
-		{
-			
-			if (vect[i] <= vect[i + 1])
-			{
-				leaders.push_back(vect[i]);
-				followers.push_back(vect[i + 1]);
+	for (size_t i = 0; i < n; i += 2) {
+		if (i + 1 < n) {
+			if (vec[i] <= vec[i + 1]) {
+				leaders.push_back(vec[i]);
+				followers.push_back(vec[i + 1]);
+			} else {
+				leaders.push_back(vec[i + 1]);
+				followers.push_back(vec[i]);
 			}
-			else
-			{
-				leaders.push_back(vect[i + 1]);
-				followers.push_back(vect[i]);
-			}
-		}
-		else
-		{
-			
-			leaders.push_back(vect[i]);
+		} else {
+			leaders.push_back(vec[i]);
 		}
 	}
-
-	
-	insertionVector(leaders);
-
-	for (size_t i = 0; i < followers.size(); i++)
-	{
-		binaryInsert(leaders, followers[i]);
+	// Recursively sort the leaders
+	insertionSortVector(leaders);
+	// Insert each follower into sorted leaders
+	for (size_t i = 0; i < followers.size(); i++) {
+		binaryInsertVector(leaders, followers[i]);
 	}
+	vec = leaders;
+}
 
-	
-	vect = leaders;
+void PmergeMe::binaryInsertVector(std::vector<int> &arr, int x) {
+    if (arr.empty()) {
+        arr.push_back(x);
+        return;
+    }
+
+    int left = 0, right = arr.size() - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] < x)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+
+    arr.insert(arr.begin() + left, x);
 }
 
 
-void PmergeMe::binaryInsert(std::vector<int> &arr, int x)
-{
-	
-	std::vector<int>::iterator it = std::lower_bound(arr.begin(), arr.end(), x);
-	arr.insert(it, x);
+void PmergeMe::insertionSortRangeVector(std::vector<int> &arr, int left, int right) {
+    for (int i = left + 1; i <= right; i++) {
+        int key = arr[i]; // Store the current element
+        int j = i - 1;
 
+        // Shift elements to the right until the correct position for key is found
+        while (j >= left && arr[j] > key) {
+            arr[j + 1] = arr[j]; // Move element to the right
+            j--;
+        }
+        // Insert key
+        arr[j + 1] = key;
+    }
 }
-	
 
 
 
-void PmergeMe::sortSplitVector(std::vector<int> &arr, int left, int right)
-{
-	for (int i = left + 1; i <= right; i++)
-	{
-		int key = arr[i];
-		int j = i - 1;
-		while (j >= left && arr[j] > key)
-		{
-			arr[j + 1] = arr[j];
-			j--;
-		}
-		arr[j + 1] = key;
+
+//List
+void PmergeMe::recursiveSortList(std::list<int> &lst) {
+	const size_t INSERTION_THRESHOLD = 5;
+	if (lst.size() <= INSERTION_THRESHOLD) {
+		insertionSortList(lst);
+		return;
 	}
-}
-
-
-void PmergeMe::insertionSortList(std::list<int> &lst)
-{
-	if (lst.size() < 2) return;
-
-		
-	for (std::list<int>::iterator it = ++lst.begin(); it != lst.end(); ++it)
-	{
-		int key = *it;
-		std::list<int>::iterator j = it;
-			
-		while (j != lst.begin())
-		{
-			std::list<int>::iterator prev = j;
-			--prev;
-			if (*prev <= key)
-				break;
-				
-			*j = *prev;
-			j = prev;
-		}
-		*j = key;
+	// Split into leader/follower pairs
+	std::list<int> leaders;
+	std::list<int> followers;
+	splitListIntoPairs(lst, leaders, followers);
+	recursiveSortList(leaders);
+	// Insert followers
+	for (std::list<int>::iterator it = followers.begin(); it != followers.end(); ++it) {
+		insertSortedList(leaders, *it);
 	}
+	// Move sorted data back into original list
+	lst.swap(leaders);
 }
 
-	
-	
-	
-void PmergeMe::insertSorted(std::list<int> &lst, int value)
-{
-		
-	for (std::list<int>::iterator it = lst.begin(); it != lst.end(); ++it)
-	{
-		if (*it > value)
-		{
+void PmergeMe::insertionSortList(std::list<int> &lst) {
+    if (lst.size() < 2)
+        return;
+    
+    for (std::list<int>::iterator it = ++lst.begin(); it != lst.end(); ++it) {
+        int key = *it; // Store the current element
+        std::list<int>::iterator j = it;
+        
+        // Shift elements to the right until the correct position for key is found
+        while (j != lst.begin()) {
+            std::list<int>::iterator prev = j;
+            --prev;
+            if (*prev <= key) // Stop shifting if the correct position is found
+                break;
+            *j = *prev; // Move element one position forward
+            j = prev;
+        }
+        
+        // Insert key in the correct position
+        *j = key;
+    }
+}
+
+
+void PmergeMe::insertSortedList(std::list<int> &lst, int value) {
+	//Insert into the correct position in a sorted list
+	for (std::list<int>::iterator it = lst.begin(); it != lst.end(); ++it) {
+		if (*it > value) {
 			lst.insert(it, value);
 			return;
 		}
 	}
-		
 	lst.push_back(value);
 }
 
-	
-	
-	
-	
-void PmergeMe::splitIntoPairs(const std::list<int> &src, std::list<int> &leaders, std::list<int> &followers)
+void PmergeMe::splitListIntoPairs(const std::list<int> &src, std::list<int> &leaders,  std::list<int> &followers) 
 {
+	// Splits elements of 'src' into (leader, follower) pairs
 	std::list<int>::const_iterator it = src.begin();
-	while (it != src.end())
-	{
+	while (it != src.end()) {
 		int first = *it;
 		++it;
-		if (it != src.end())
-		{
+		if (it != src.end()) {
 			int second = *it;
 			++it;
-				
-			if (first <= second)
-			{
+			if (first <= second) {
 				leaders.push_back(first);
 				followers.push_back(second);
-			}
-			else
-			{
+			} else {
 				leaders.push_back(second);
 				followers.push_back(first);
 			}
-		}
-		else
-		{
-				
+		} else {
+			// odd count => last item alone goes to leaders
 			leaders.push_back(first);
 		}
 	}
-}
-
-	
-	
-	
-void PmergeMe::recursiveList(std::list<int> &list)
-{
-	const size_t INSERTION_THRESHOLD = 5;
-
-		
-	if (list.size() <= INSERTION_THRESHOLD)
-	{
-		insertionSortList(list);
-		return;
-	}
-
-		
-	std::list<int> leaders;
-	std::list<int> followers;
-	splitIntoPairs(list, leaders, followers);
-
-		
-	recursiveList(leaders);
-
-		
-	for (std::list<int>::iterator it = followers.begin(); it != followers.end(); ++it)
-	{
-		insertSorted(leaders, *it);
-	}
-	list.swap(leaders); 
-		
-}
-
-	
-void PmergeMe::megreSortList()
-{
-	if (list.size() < 2)
-		return; 	
-	recursiveList(list);
-}
-
-void PmergeMe::printSort()
-{
-    // Можно вывести вектор (после sort) для наглядности
-    std::cout << "After: ";
-    for (std::vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
-        std::cout << *it << " ";
-    std::cout << std::endl;
 }
